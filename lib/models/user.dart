@@ -93,7 +93,7 @@ User user_1 = User(
   nama: "Wendy Santoso",
   email: "c14200036@john.petra.ac.id",
   noTelp: "085106777266",
-  favoritMuseum: [museum_3, museum_2, museum_1],
+  favoritMuseum: [museums[0], museums[1], museums[4]],
   // favoritMuseum: [],
   komentar: [comment1],
 );

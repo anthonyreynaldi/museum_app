@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    getMuseums();
   }
 
   @override
