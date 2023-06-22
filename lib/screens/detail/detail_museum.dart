@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
+import 'package:museum_app/api_service.dart';
 import 'package:readmore/readmore.dart';
 import 'package:museum_app/models/comment.dart';
 import 'package:museum_app/models/museum.dart';
 import 'package:museum_app/models/user.dart';
 import 'package:museum_app/screens/detail/detail_view_museum.dart';
 import 'package:museum_app/widgets/comment_card.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class DetailMuseum extends StatefulWidget {
   final Museum museum;
@@ -17,6 +20,26 @@ class DetailMuseum extends StatefulWidget {
 }
 
 class _DetailMuseumState extends State<DetailMuseum> {
+  final ApiService apiService = ApiService();
+  late Future<List<Museum>> _cartItemsFuture;
+
+  @override
+  void initState() {
+    _cartItemsFuture = apiService.getProducts();
+    print("aaa");
+    _cartItemsFuture.then((cartItems) {
+      print("aaaa");
+      print(cartItems);
+      for (final cartItem in cartItems) {
+        print("aaa");
+      }
+
+      setState(() {}); // Mengupdate tampilan setelah menghitung total harga
+    });
+
+    super.initState();
+  }
+
   bool isFavorite = false;
 
   // Create a text controller and use it to retrieve the current value
