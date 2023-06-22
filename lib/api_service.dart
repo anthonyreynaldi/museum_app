@@ -14,6 +14,7 @@ class ApiService {
     final response = await http.get(Uri.parse('$baseUrl/api/museums'));
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
+      print(jsonData);
       return jsonData.map((item) => Museum.fromJson(item)).toList();
     } else {
       throw Exception('Failed to load museums');
