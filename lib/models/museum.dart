@@ -177,5 +177,5 @@ Future<void> getMuseums() async {
   popular = museums;
   recent = List.from(museums.reversed);
   rating = List.from(museums);
-  rating.shuffle(Random());
+  rating.sort((a, b) => b.rating.compareTo(a.rating));
 }

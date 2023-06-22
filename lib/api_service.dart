@@ -12,7 +12,7 @@ import 'package:museum_app/models/user.dart';
 // import 'package:project_ambw/models/category.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://127.0.0.1:8000';
+  static const String baseUrl = 'http://10.0.2.2:8000';
 
   Future<List<Museum>> getMuseum() async {
     final response = await http.get(Uri.parse('$baseUrl/api/museums'));
@@ -29,8 +29,8 @@ class ApiService {
     final storage = new FlutterSecureStorage();
     var jwt = await storage.read(key: 'jwt');
 
-    jwt =
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODc0NDY0NzIsImV4cCI6MTY4NzUzMjg3MiwibmJmIjoxNjg3NDQ2NDcyLCJqdGkiOiI5YnloZVFHb0hkOE9HcDhVIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.J7206DHXLBOS-zLJZXdCbj3xIZV7kLMlnMiMP6ahLHE";
+    // jwt =
+    //     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODc0NDY0NzIsImV4cCI6MTY4NzUzMjg3MiwibmJmIjoxNjg3NDQ2NDcyLCJqdGkiOiI5YnloZVFHb0hkOE9HcDhVIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.J7206DHXLBOS-zLJZXdCbj3xIZV7kLMlnMiMP6ahLHE";
 
     return jwt;
   }
@@ -97,12 +97,13 @@ class ApiService {
   }
 
   Future<List<Museum>> getFavoriteMuseums() async {
+    final storage = new FlutterSecureStorage();
+    var jwt = await storage.read(key: 'jwt');
     //use bearer token
     final response = await http.get(
       Uri.parse('$baseUrl/api/favorites'),
       headers: {
-        'Authorization':
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODc0NDQ3NzksImV4cCI6MTY4NzUzMTE3OSwibmJmIjoxNjg3NDQ0Nzc5LCJqdGkiOiI4eGw4NXdSb0FyWnZhSEFNIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2TnAtYPmR9xih-nonxJXN05fbq94dYoj3JVr0xO_tEk', // Include bearer token in the headers
+        'Authorization': 'Bearer $jwt', // Include bearer token in the headers
       },
     );
 
@@ -118,10 +119,11 @@ class ApiService {
   }
 
   Future<User> getProfile() async {
+    final storage = new FlutterSecureStorage();
+    var jwt = await storage.read(key: 'jwt');
     final response =
         await http.get(Uri.parse('$baseUrl/api/auth/profile'), headers: {
-      'Authorization':
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODc0NDQ3NzksImV4cCI6MTY4NzUzMTE3OSwibmJmIjoxNjg3NDQ0Nzc5LCJqdGkiOiI4eGw4NXdSb0FyWnZhSEFNIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2TnAtYPmR9xih-nonxJXN05fbq94dYoj3JVr0xO_tEk'
+      'Authorization': 'Bearer $jwt', // Include bearer token in the headers
     });
     print("lol");
     print(json.decode(response.body));
@@ -136,12 +138,13 @@ class ApiService {
   //return json response function
 
   Future<Map<String, dynamic>> deleteFavorite(int museumId) async {
+    final storage = new FlutterSecureStorage();
+    var jwt = await storage.read(key: 'jwt');
     print("museumId: $museumId");
     final response = await http.post(
       Uri.parse('$baseUrl/api/delete-favorite'),
       headers: {
-        'Authorization':
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODc0NDQ3NzksImV4cCI6MTY4NzUzMTE3OSwibmJmIjoxNjg3NDQ0Nzc5LCJqdGkiOiI4eGw4NXdSb0FyWnZhSEFNIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2TnAtYPmR9xih-nonxJXN05fbq94dYoj3JVr0xO_tEk',
+        'Authorization': 'Bearer $jwt',
       },
       body: {
         'museumId': museumId.toString()
@@ -158,12 +161,13 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> storeFavorite(int museumId) async {
+    final storage = new FlutterSecureStorage();
+    var jwt = await storage.read(key: 'jwt');
     print("museumId: $museumId");
     final response = await http.post(
       Uri.parse('$baseUrl/api/favorite'),
       headers: {
-        'Authorization':
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODc0NDQ3NzksImV4cCI6MTY4NzUzMTE3OSwibmJmIjoxNjg3NDQ0Nzc5LCJqdGkiOiI4eGw4NXdSb0FyWnZhSEFNIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2TnAtYPmR9xih-nonxJXN05fbq94dYoj3JVr0xO_tEk',
+        'Authorization': 'Bearer $jwt',
       },
       body: {
         'museumId': museumId.toString()

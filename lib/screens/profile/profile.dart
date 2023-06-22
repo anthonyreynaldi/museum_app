@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:museum_app/api_service.dart';
+import 'package:museum_app/models/user.dart';
 import 'package:museum_app/screens/login/Screens/Login/login_screen.dart';
 import 'package:museum_app/screens/profile/aboutUs.dart';
 import 'package:museum_app/screens/profile/privacyPolicy.dart';
@@ -20,9 +22,21 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late String value;
   late bool logged;
+  late String name;
+  late String email;
 
   @override
   void initState() {
+    getProfile();
+    name = user_1.getNama();
+    if (name == "" || name == null) {
+      name = "Guest";
+    }
+    email = user_1.getEmail();
+    if (email == "" || email == null) {
+      email = "guest@petra.ac.id";
+    }
+
     super.initState();
     getSavedData().then((value) {
       setState(() {
@@ -80,16 +94,16 @@ class _ProfilePageState extends State<ProfilePage> {
               //     textAlign: TextAlign.start,
               //   )
               // ] else ...[
-              const Text(
+              Text(
                   // userName!,
                   // userName ??
-                  "Guest",
+                  name,
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
                   textAlign: TextAlign.center),
-              const Text(
+              Text(
                 // userEmail!,
                 // userEmail ??
-                "guest@petra.ac.id",
+                email,
                 style: TextStyle(
                   fontSize: 14,
                 ),
@@ -103,12 +117,12 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (logged) ...[
-                _buildAbout(),
+                // _buildAbout(),
                 _buildClearCache(),
                 _buildPrivacyPolicy(),
                 _buildLogout()
               ] else ...[
-                _buildAbout(),
+                // _buildAbout(),
                 _buildClearCache(),
                 _buildPrivacyPolicy(),
                 _buildLogin()

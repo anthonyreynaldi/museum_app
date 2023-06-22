@@ -116,7 +116,7 @@ class _LoginFormState extends State<LoginForm> {
       //     .show();
       final storage = new FlutterSecureStorage();
       // String value = await storage.read(key: key);
-      await storage.write(key: 'jwt', value: responseJson);
+      await storage.write(key: 'jwt', value: responseJson.toString());
 
       // var value = await storage.read(key: 'jwt');
       // Alert(context: context, title: value.toString(), type: AlertType.info)
