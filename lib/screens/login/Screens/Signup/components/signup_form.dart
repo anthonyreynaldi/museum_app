@@ -147,6 +147,10 @@ class _SignUpFormState extends State<SignUpForm> {
                 title: "Sign In Berhasil",
                 type: AlertType.success)
             .show();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
         // pd.close();
       } else {
         Alert(context: context, title: "Sign In Gagal", type: AlertType.error)

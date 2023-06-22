@@ -7,6 +7,8 @@ import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 import 'package:http/http.dart' as http;
 import 'package:museum_app/screens/home/home.dart';
 
+import '../../../../../navbar.dart';
+import '../../../../profile/profile.dart';
 import '../../../components/already_have_an_account_acheck.dart';
 import '../../../constants2.dart';
 import '../../Signup/signup_screen.dart';
@@ -99,7 +101,7 @@ class _LoginFormState extends State<LoginForm> {
     ProgressDialog pd = ProgressDialog(context: context);
     // pd.show(max: 100, msg: 'Loading...');
     final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/auth/login'),
+        Uri.parse('http://10.0.2.2:8000/api/auth/login'),
         body: {'email': email.text, 'password': pass.text},
         headers: {'Accept': 'application/json'});
     if (response.statusCode == 200) {
@@ -121,6 +123,10 @@ class _LoginFormState extends State<LoginForm> {
       //     .show();
       // pd.close();
       // pd.update(value: 100);
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => ProfilePage()),
+      // );
     } else {
       Alert(context: context, title: "Login Gagal", type: AlertType.error)
           .show();
@@ -133,7 +139,7 @@ class _LoginFormState extends State<LoginForm> {
     if (success) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => const Navbar()),
       );
     }
   }

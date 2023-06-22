@@ -22,7 +22,7 @@ class LoginScreenTopImage extends StatelessWidget {
             const Spacer(),
             Expanded(
               flex: 8,
-              child: Image.asset('assets/images/Manpro.png'),
+              child: Image.asset('assets/icons/logo.png'),
             ),
             const Spacer(),
           ],

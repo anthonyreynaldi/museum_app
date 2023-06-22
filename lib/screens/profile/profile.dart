@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:museum_app/screens/login/Screens/Login/login_screen.dart';
 import 'package:museum_app/screens/profile/aboutUs.dart';
 import 'package:museum_app/screens/profile/privacyPolicy.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:http/http.dart' as http;
+
+import '../../navbar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -17,35 +23,23 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    getSavedData().whenComplete(() async {
-      if (value != null) {
-        logged = true;
-      } else {
-        logged = false;
-      }
+    super.initState();
+    getSavedData().then((value) {
+      setState(() {
+        if (value != null) {
+          logged = true;
+        } else {
+          logged = false;
+        }
+      });
     });
   }
 
-  Future getSavedData() async {
-    final storage = new FlutterSecureStorage();
+  Future<String?> getSavedData() async {
+    final storage = FlutterSecureStorage();
     String? value = await storage.read(key: 'jwt');
 
-    setState(() {
-      value = value;
-    });
-
-    print(value);
-
-    // final SharedPreferences sharedPreferences =
-    //     await SharedPreferences.getInstance();
-
-    // // debugPrint("nrp: ${sharedPreferences.getString('nrp')}");
-    // setState(() {
-    //   finalNRP = sharedPreferences.getString('nrp');
-    //   userName = sharedPreferences.getString('nama');
-    //   userEmail = sharedPreferences.getString('email');
-    //   finalServer = sharedPreferences.getString('server');
-    // });
+    return value;
   }
 
   @override
@@ -108,17 +102,17 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // if (logged) ...[
-              //   // _buildCJ(),
-              //   _buildSurvey(),
-              //   _buildPrivacyPolicy(),
-              //   _buildLogout()
-              // ] else ...[
-              _buildAbout(),
-              _buildClearCache(),
-              _buildPrivacyPolicy(),
-              _buildLogin()
-              // ]
+              if (logged) ...[
+                _buildAbout(),
+                _buildClearCache(),
+                _buildPrivacyPolicy(),
+                _buildLogout()
+              ] else ...[
+                _buildAbout(),
+                _buildClearCache(),
+                _buildPrivacyPolicy(),
+                _buildLogin()
+              ]
             ],
           )
         ],
@@ -271,10 +265,24 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future logout() async {
     final storage = FlutterSecureStorage();
-    storage.delete(key: 'jwt');
+    final token = await storage.read(key: 'jwt');
+    final response = await http
+        .post(Uri.parse('http://10.0.2.2:8000/api/auth/logout'), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": "Bearer " + token!
+    });
+    if (response.statusCode == 200) {
+      Alert(context: context, title: "Logout Berhasil", type: AlertType.success)
+          .show();
+      storage.delete(key: 'jwt');
+    } else {
+      Alert(context: context, title: "Logout Gagal", type: AlertType.error)
+          .show();
+    }
 
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        context, MaterialPageRoute(builder: (context) => Navbar()));
   }
 
   Widget _buildLogin() {
