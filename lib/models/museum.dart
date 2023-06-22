@@ -1,3 +1,4 @@
+import 'package:museum_app/api_service.dart';
 import 'package:museum_app/models/comment.dart';
 
 class Museum {
@@ -148,7 +149,17 @@ class Museum {
   }
 
   // getter listKomentar
-  List<Comment> getListKomentar() {
+  Future<List<Comment>> getListKomentar() async {
+    listKomentar = await ApiService.getComments(this.id);
+
+    return listKomentar;
+  }
+  
+  Future<List<Comment>> postKomentar(Comment newComment) async {
+    await ApiService.postComments(newComment.museumId, newComment.komentar);
+
+    listKomentar = await ApiService.getComments(this.id);
+
     return listKomentar;
   }
 }
