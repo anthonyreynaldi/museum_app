@@ -1,3 +1,4 @@
+import 'package:museum_app/api_service.dart';
 import 'package:museum_app/models/museum.dart';
 import 'package:museum_app/models/comment.dart';
 
@@ -5,7 +6,6 @@ class User {
   int id = 0;
   String nama = "";
   String email = "";
-  String noTelp = "";
   List<Museum> favoritMuseum = [];
   List<Comment> komentar = [];
 
@@ -14,17 +14,15 @@ class User {
       {required this.id,
       required this.nama,
       required this.email,
-      required this.noTelp,
       required this.favoritMuseum,
       required this.komentar});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    nama = json['nama'];
+    nama = json['name'];
     email = json['email'];
-    noTelp = json['noTelp'];
-    favoritMuseum = json['favoritMuseum'];
-    komentar = json['komentar'];
+    favoritMuseum = json['favoritMuseum'] ?? [];
+    komentar = json['komentar'] ?? [];
   }
 
   // setter id
@@ -57,16 +55,6 @@ class User {
     return email;
   }
 
-  // setter noTelp
-  void setNoTelp(String noTelp) {
-    this.noTelp = noTelp;
-  }
-
-  // getter noTelp
-  String getNoTelp() {
-    return noTelp;
-  }
-
   // setter favoritMuseum
   void setFavoritMuseum(List<Museum> favoritMuseum) {
     this.favoritMuseum = favoritMuseum;
@@ -88,12 +76,32 @@ class User {
   }
 }
 
-User user_1 = User(
-  id: 0,
-  nama: "Wendy Santoso",
-  email: "c14200036@john.petra.ac.id",
-  noTelp: "085106777266",
-  favoritMuseum: [museums[0], museums[1], museums[4]],
-  // favoritMuseum: [],
-  komentar: [comment1],
-);
+//initiate null user
+User user_1 = User(id: 0, nama: "", email: "", favoritMuseum: [], komentar: []);
+
+Future<void> getFavorites() async {
+  List<Museum> museums = await ApiService().getFavoriteMuseums();
+
+  User user = await ApiService().getProfile();
+
+  user_1.setFavoritMuseum(museums);
+  print("erricccc");
+
+  List<Museum> favoritMuseum = user_1.getFavoritMuseum();
+  for (int i = 0; i < favoritMuseum.length; i++) {
+    print(favoritMuseum[i].getNama());
+    //print all attributes and values
+    print(favoritMuseum[i].getId());
+  }
+
+  // popular = museums;
+  // recent = List.from(museums.reversed);
+  // rating = List.from(museums);
+}
+
+Future<void> getProfile() async {
+  User user = await ApiService().getProfile();
+  user_1.setEmail(await user.getEmail());
+  user_1.setNama(await user.getNama());
+  user_1.setId(await user.getId());
+}

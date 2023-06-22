@@ -37,11 +37,12 @@ class _DetailMuseumState extends State<DetailMuseum> {
     //   setState(() {}); // Mengupdate tampilan setelah menghitung total harga
     // });
 
+    getFavorites();
+    getProfile();
+
     widget.museum.getListKomentar().then((value) => {
-      setState(() => {
-        listComments = value
-      })
-    });
+          setState(() => {listComments = value})
+        });
 
     super.initState();
   }
@@ -57,11 +58,14 @@ class _DetailMuseumState extends State<DetailMuseum> {
     setState(() {
       if (isFavorite) {
         isFavorite = false;
+        apiService.deleteFavorite(widget.museum.getId());
         user_1
             .getFavoritMuseum()
             .removeWhere((item) => item.id == widget.museum.getId());
       } else {
         isFavorite = true;
+        ApiService().storeFavorite(widget.museum.getId());
+
         user_1.getFavoritMuseum().add(widget.museum);
       }
     });
@@ -91,11 +95,9 @@ class _DetailMuseumState extends State<DetailMuseum> {
       // widget.museum.getListKomentar().add(newComment);
     });
 
-     widget.museum.postKomentar(newComment).then((value) => {
-      setState(() => {
-        listComments = value
-      })
-    });
+    widget.museum.postKomentar(newComment).then((value) => {
+          setState(() => {listComments = value})
+        });
   }
 
   @override
@@ -104,7 +106,8 @@ class _DetailMuseumState extends State<DetailMuseum> {
 
     // cek apakah museum ini ada di favorite-nya user
     for (int i = 0; i < user_1.getFavoritMuseum().length; i++) {
-      if (identical(widget.museum, user_1.getFavoritMuseum()[i])) {
+      if (identical(
+          widget.museum.getId(), user_1.getFavoritMuseum()[i].getId())) {
         isFavorite = true;
         break;
       }
@@ -555,8 +558,7 @@ class _DetailMuseumState extends State<DetailMuseum> {
                                 margin:
                                     const EdgeInsets.symmetric(vertical: 12.0),
                                 child: CommentCard(
-                                  komentar:
-                                      listComments[index],
+                                  komentar: listComments[index],
                                 ),
                               );
                             },

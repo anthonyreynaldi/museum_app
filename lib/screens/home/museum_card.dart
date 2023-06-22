@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_network/image_network.dart';
+import 'package:museum_app/api_service.dart';
 import 'package:museum_app/constants.dart';
 import 'package:museum_app/models/museum.dart';
 import 'package:museum_app/models/user.dart';
@@ -138,12 +139,20 @@ class CardDetail extends StatefulWidget {
 }
 
 class _CardDetailState extends State<CardDetail> {
+  @override
+  void initState() {
+    getFavorites();
+    getProfile();
+    super.initState();
+  }
+
   bool isFavorite = false;
 
   void updateButton() {
     setState(() {
       if (isFavorite) {
         isFavorite = false;
+        ApiService().deleteFavorite(widget.museum.getId());
         user_1
             .getFavoritMuseum()
             .removeWhere((item) => item.id == widget.museum.getId());
@@ -158,6 +167,8 @@ class _CardDetailState extends State<CardDetail> {
         //     identical(museum_1, user_1.getFavoritMuseum()[1]).toString());
       } else {
         isFavorite = true;
+        ApiService().storeFavorite(widget.museum.getId());
+
         user_1.getFavoritMuseum().add(widget.museum);
         // print(user_1.getFavoritMuseum().toString());
         // print("Is click true");
@@ -169,7 +180,8 @@ class _CardDetailState extends State<CardDetail> {
   Widget build(BuildContext context) {
     // cek apakah museum ini ada di favorite-nya user
     for (int i = 0; i < user_1.getFavoritMuseum().length; i++) {
-      if (identical(widget.museum, user_1.getFavoritMuseum()[i])) {
+      if (identical(
+          widget.museum.getId(), user_1.getFavoritMuseum()[i].getId())) {
         isFavorite = true;
         break;
       }

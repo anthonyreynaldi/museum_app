@@ -15,6 +15,13 @@ class FavoriteTempPage extends StatefulWidget {
 
 class _FavoriteTempPageState extends State<FavoriteTempPage> {
   @override
+  void initState() {
+    getFavorites();
+    getProfile();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 

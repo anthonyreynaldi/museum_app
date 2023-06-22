@@ -16,6 +16,13 @@ class FavoritePage extends StatefulWidget {
 class _FavoritePageState extends State<FavoritePage> {
   bool isFavorite = false;
 
+  @override
+  void initState() {
+    getFavorites();
+    getProfile();
+    super.initState();
+  }
+
   void updateList(int indexItem) {
     setState(() {
       print(indexItem);

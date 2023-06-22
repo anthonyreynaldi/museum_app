@@ -173,7 +173,7 @@ List<Museum> rating = [];
 List<Museum> popular = [];
 
 Future<void> getMuseums() async {
-  museums = await ApiService().getProducts();
+  museums = await ApiService().getMuseum();
   popular = museums;
   recent = List.from(museums.reversed);
   rating = List.from(museums);
