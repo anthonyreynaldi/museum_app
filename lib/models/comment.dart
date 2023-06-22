@@ -17,7 +17,7 @@ class Comment {
     id = json['id'];
     museumId = json['museumId'];
     namaPengunggah = json['namaPengunggah'];
-    tanggalUnggah = json['noTtanggalUnggahelp'];
+    tanggalUnggah = json['tanggalUnggah'];
     komentar = json['komentar'];
   }
 

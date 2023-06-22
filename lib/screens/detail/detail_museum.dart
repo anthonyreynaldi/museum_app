@@ -25,22 +25,29 @@ class _DetailMuseumState extends State<DetailMuseum> {
 
   @override
   void initState() {
-    _cartItemsFuture = apiService.getProducts();
-    print("aaa");
-    _cartItemsFuture.then((cartItems) {
-      print("aaaa");
-      print(cartItems);
-      for (final cartItem in cartItems) {
-        print("aaa");
-      }
+    // _cartItemsFuture = apiService.getProducts();
+    // print("aaa");
+    // _cartItemsFuture.then((cartItems) {
+    //   print("aaaa");
+    //   print(cartItems);
+    //   for (final cartItem in cartItems) {
+    //     print("aaa");
+    //   }
 
-      setState(() {}); // Mengupdate tampilan setelah menghitung total harga
+    //   setState(() {}); // Mengupdate tampilan setelah menghitung total harga
+    // });
+
+    widget.museum.getListKomentar().then((value) => {
+      setState(() => {
+        listComments = value
+      })
     });
 
     super.initState();
   }
 
   bool isFavorite = false;
+  List<Comment> listComments = [];
 
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
@@ -61,19 +68,19 @@ class _DetailMuseumState extends State<DetailMuseum> {
   }
 
   void uploadComment(String isiComment) {
+    // get current date
+    DateTime now = DateTime.now();
+    DateTime date = DateTime(now.year, now.month, now.day);
+
+    // create new comment instance
+    Comment newComment = Comment(
+        id: listComment.length,
+        museumId: widget.museum.getId(),
+        namaPengunggah: user_1.getNama(),
+        tanggalUnggah: date.toString().replaceAll("00:00:00.000", ""),
+        komentar: isiComment);
+
     setState(() {
-      // get current date
-      DateTime now = DateTime.now();
-      DateTime date = DateTime(now.year, now.month, now.day);
-
-      // create new comment instance
-      Comment newComment = Comment(
-          id: listComment.length,
-          museumId: widget.museum.getId(),
-          namaPengunggah: user_1.getNama(),
-          tanggalUnggah: date.toString().replaceAll("00:00:00.000", ""),
-          komentar: isiComment);
-
       // save to user comment list
       user_1.getKomentar().add(newComment);
 
@@ -81,7 +88,13 @@ class _DetailMuseumState extends State<DetailMuseum> {
       listComment.add(newComment);
 
       // add to museum comment list
-      widget.museum.getListKomentar().add(newComment);
+      // widget.museum.getListKomentar().add(newComment);
+    });
+
+     widget.museum.postKomentar(newComment).then((value) => {
+      setState(() => {
+        listComments = value
+      })
     });
   }
 
@@ -497,7 +510,7 @@ class _DetailMuseumState extends State<DetailMuseum> {
                     const SizedBox(height: 10),
 
                     // view comments
-                    (widget.museum.getListKomentar().isEmpty)
+                    (listComments.isEmpty)
                         ? Container(
                             margin: const EdgeInsets.only(top: 10, bottom: 20),
                             width: size.width,
@@ -533,7 +546,7 @@ class _DetailMuseumState extends State<DetailMuseum> {
                             ),
                           )
                         : ListView.builder(
-                            itemCount: widget.museum.getListKomentar().length,
+                            itemCount: listComments.length,
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
@@ -543,7 +556,7 @@ class _DetailMuseumState extends State<DetailMuseum> {
                                     const EdgeInsets.symmetric(vertical: 12.0),
                                 child: CommentCard(
                                   komentar:
-                                      widget.museum.getListKomentar()[index],
+                                      listComments[index],
                                 ),
                               );
                             },
