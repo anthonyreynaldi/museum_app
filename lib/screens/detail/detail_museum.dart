@@ -21,22 +21,9 @@ class DetailMuseum extends StatefulWidget {
 
 class _DetailMuseumState extends State<DetailMuseum> {
   final ApiService apiService = ApiService();
-  late Future<List<Museum>> _cartItemsFuture;
 
   @override
   void initState() {
-    // _cartItemsFuture = apiService.getProducts();
-    // print("aaa");
-    // _cartItemsFuture.then((cartItems) {
-    //   print("aaaa");
-    //   print(cartItems);
-    //   for (final cartItem in cartItems) {
-    //     print("aaa");
-    //   }
-
-    //   setState(() {}); // Mengupdate tampilan setelah menghitung total harga
-    // });
-
     getFavorites();
     getProfile();
 

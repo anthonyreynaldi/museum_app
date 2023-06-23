@@ -5,7 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:museum_app/api_service.dart';
 import 'package:museum_app/models/user.dart';
 import 'package:museum_app/screens/login/Screens/Login/login_screen.dart';
-import 'package:museum_app/screens/profile/aboutUs.dart';
 import 'package:museum_app/screens/profile/privacyPolicy.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:http/http.dart' as http;
@@ -132,45 +131,6 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     ));
-  }
-
-  Widget _buildAbout() {
-    // About us
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(25, 0, 25, 15),
-      child: ElevatedButton.icon(
-        icon: const Icon(Icons.book_outlined),
-        style: ElevatedButton.styleFrom(
-            elevation: 2,
-            // backgroundColor: Color(0xffEEF6FF),
-            primary: const Color(0xFFE2EFFF),
-            // foregroundColor: Color.fromARGB(255, 44, 55, 134),
-            onPrimary: const Color(0xff0D1B2A),
-            minimumSize: const Size.fromHeight(45),
-            alignment: Alignment.centerLeft,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            )),
-        onPressed: () {
-          // navigate ke about us
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AboutUsPage(),
-            ),
-          );
-        },
-        label: const Text(
-          "About Us",
-          style: TextStyle(
-            fontFamily: "Cera Round Pro 2",
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _buildClearCache() {
